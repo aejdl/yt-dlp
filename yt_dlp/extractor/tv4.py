@@ -92,7 +92,9 @@ class TV4IE(InfoExtractor):
                 'protocol': 'hls,dash',
                 'drm': 'widevine',
                 'capabilities': 'live-drm-adstitch-2,expired_assets',
-            })['playbackItem']['manifestUrl']
+            },
+            headers=self.geo_verification_headers(),
+        )['playbackItem']['manifestUrl']
         formats = []
         subtitles = {}
 
