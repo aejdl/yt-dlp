@@ -73,7 +73,7 @@ class TV4IE(InfoExtractor):
         video_id = self._match_id(url)
 
         info = self._download_json(
-            'https://playback-api.b17g.net/asset/%s' % video_id,
+            'https://playback2.a2d.tv/asset/%s' % video_id,
             video_id, 'Downloading video info JSON', query={
                 'service': 'tv4',
                 'device': 'browser',
@@ -84,12 +84,17 @@ class TV4IE(InfoExtractor):
         title = info['title']
 
         manifest_url = self._download_json(
-            'https://playback-api.b17g.net/media/' + video_id,
+            'https://playback2.a2d.tv/play/%s' % video_id,
             video_id, query={
                 'service': 'tv4',
                 'device': 'browser',
-                'protocol': 'hls',
-            })['playbackItem']['manifestUrl']
+                'browser': 'GoogleChrome',
+                'protocol': 'hls,dash',
+                'drm': 'widevine',
+                'capabilities': 'live-drm-adstitch-2,expired_assets',
+            },
+            headers=self.geo_verification_headers(),
+        )['playbackItem']['manifestUrl']
         formats = []
         subtitles = {}
 
